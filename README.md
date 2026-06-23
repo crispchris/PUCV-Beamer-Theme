@@ -54,3 +54,20 @@ bibtex slide
 xelatex slide.tex
 xelatex slide.tex
 ```
+
+---
+
+## Overleaf Compatibility
+
+This template is fully compatible with [Overleaf](https://www.overleaf.com/).
+
+### Import from GitHub
+You can easily import this template directly into Overleaf using the **New Project** -> **Import from GitHub** functionality. Simply provide the repository URL:
+`https://github.com/crispchris/PUCV-Beamer-Theme.git`
+
+### Recommended Compiler (XeLaTeX)
+To compile the document successfully on Overleaf, you must change the compiler to **XeLaTeX**:
+1. Open the project in Overleaf and click on the **Menu** button at the top-left corner.
+2. Under **Settings**, change the **Compiler** from pdfLaTeX to **XeLaTeX**.
+
+![Overleaf XeLaTeX Settings](XeLaTeX.png)
