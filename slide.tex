@@ -1,0 +1,811 @@
+\documentclass[10pt]{beamer}
+\geometry{paperwidth=720bp,paperheight=540bp}
+
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{fontspec}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage{animate}
+\usepackage{booktabs}
+\usepackage{appendixnumberbeamer}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% Numbered captions for figures/tables
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{sections/subsections in toc}[sections numbered]
+\setbeamertemplate{bibliography item}[text]
+
+% Python code highlighting style
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    backgroundcolor=\color{black!3},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{PUCVBlue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\fontsize{13bp}{16bp}\selectfont,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+% --------------------------------------------------
+% Typography  –  Roboto family (matches PPTX template)
+% --------------------------------------------------
+\setsansfont{Roboto}[
+    Path           = ./,
+    UprightFont    = Roboto-Light.ttf,
+    BoldFont       = Roboto-Medium.ttf,
+    ItalicFont     = Roboto-Italic.ttf,
+    BoldItalicFont = Roboto-Italic.ttf,
+]
+\newfontfamily\robotomedium{Roboto Medium}[
+    Path        = ./,
+    UprightFont = Roboto-Medium.ttf,
+]
+\renewcommand{\familydefault}{\sfdefault}
+
+% --------------------------------------------------
+% Colors  –  extracted from exact target PDF RGB
+% --------------------------------------------------
+\definecolor{PUCVBlue}{HTML}{27598C}       % Cover blue block
+\definecolor{PUCVGold}{HTML}{B1906F}       % Cover gold triangle
+\definecolor{PUCVRed}{HTML}{953735}        % Top red strip / title accent
+\definecolor{PUCVText}{HTML}{17375E}       % Body text (theme dk2)
+\definecolor{PUCVBottom}{HTML}{17375E}     % Bottom dark-navy bar
+\definecolor{PUCVTitleRed}{HTML}{953735}   % Content slide title
+
+% --------------------------------------------------
+% Customization Options (enable/disable on demand)
+% --------------------------------------------------
+\newif\ifshowpagenumbers
+\showpagenumberstrue       % Enable page numbers by default (starts on slide 2)
+
+\newif\ifshowfootertext
+\showfootertexttrue        % Enable additional center footer text by default
+
+\newif\ifshowfooterdate
+\showfooterdatetrue        % Enable date in footer by default
+
+\newcommand{\additionalfootertext}{Autor | Title of Presentation}
+\newcommand{\additionalfooterdate}{\insertdate}
+
+
+% --------------------------------------------------
+% Beamer cleanup
+% --------------------------------------------------
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{frametitle}{}
+\setbeamersize{text margin left=0pt,text margin right=0pt}
+\setbeamertemplate{itemize item}{\makebox[0pt][l]{\raise0.2ex\hbox{\large$\bullet$}}}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{itemize item}{fg=PUCVText}
+
+% Custom blocks styling matching PUCV colors
+\setbeamercolor{block title}{bg=PUCVBlue,fg=white}
+\setbeamercolor{block body}{bg=PUCVBlue!10,fg=black}
+\setbeamercolor{block title alerted}{bg=PUCVTitleRed,fg=white}
+\setbeamercolor{block body alerted}{bg=PUCVTitleRed!10,fg=black}
+\setbeamercolor{block title example}{bg=PUCVGold,fg=white}
+\setbeamercolor{block body example}{bg=PUCVGold!10,fg=black}
+
+% Table of Contents styling
+\setbeamercolor{section in toc}{fg=PUCVText}
+\setbeamercolor{subsection in toc}{fg=PUCVText}
+\setbeamercolor{structure}{fg=PUCVBlue}
+
+% Automatically show Table of Contents with section highlighting
+\AtBeginSection[]
+{
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture,overlay]
+    % Title
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        font=\robotomedium\fontsize{16bp}{19bp}\selectfont,
+        text=PUCVTitleRed
+    ] at ([xshift=54.62bp,yshift=-84.44bp]current page.north west) {%
+        \addfontfeature{LetterSpace=12}TABLA DE CONTENIDOS};
+
+    % Body
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        text width=501.3bp
+    ] at ([xshift=76.49bp,yshift=-139.56bp]current page.north west) {
+        \begin{minipage}{501.3bp}
+        \fontsize{16bp}{19.2bp}\selectfont
+        \color{PUCVText}
+        \RaggedRight
+        \setlength{\parskip}{0pt}
+        \setlength{\leftmargini}{22.55bp}
+        \setlength{\labelwidth}{0bp}
+        \setlength{\labelsep}{22.55bp}
+        \setlength{\itemsep}{0.00bp}
+        \setlength{\topsep}{8bp}
+        \tableofcontents[currentsection]
+        \end{minipage}
+    };
+\end{tikzpicture}
+\end{frame}
+}
+
+% --------------------------------------------------
+% Assets
+% --------------------------------------------------
+\newcommand{\coverlogo}{Escudo_PUCV-2016_color v.png}
+\newcommand{\innerlogo}{Escudo_PUCV-2016_color h.png}
+
+% --------------------------------------------------
+% Backgrounds
+% --------------------------------------------------
+\setbeamertemplate{background}{
+\begin{tikzpicture}[remember picture,overlay]
+    % ------------------------------------------
+    % CONTENT SLIDE (720x540 bp)
+    % ------------------------------------------
+    \fill[white] (current page.north west) rectangle (current page.south east);
+
+    % Top red strip: 16.5bp tall
+    \fill[PUCVRed]
+        (current page.north west)
+        rectangle ([yshift=-16.5bp]current page.north east);
+
+    % Bottom dark-navy bar: 23bp tall
+    \fill[PUCVBottom]
+        (current page.south west)
+        rectangle ([yshift=23bp]current page.south east);
+
+    % Bottom URL: "pucv.cl" white text in bottom bar
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        font=\fontsize{11bp}{11bp}\selectfont\sffamily,
+        text=white
+    ] at ([xshift=607.53bp,yshift=-522.38bp]current page.north west) {pucv.cl};
+
+    % Page number (starts on slide 2, which are the content slides)
+    \ifshowpagenumbers
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        font=\fontsize{11bp}{11bp}\selectfont\sffamily,
+        text=white
+    ] at ([xshift=660.00bp,yshift=-522.38bp]current page.north west) {\insertframenumber};
+    \fi
+
+    % Additional center footer text
+    \ifshowfootertext
+    \node[
+        anchor=north,
+        inner sep=0pt,
+        font=\fontsize{11bp}{11bp}\selectfont\sffamily,
+        text=white
+    ] at ([xshift=360.00bp,yshift=-522.38bp]current page.north west) {\additionalfootertext};
+    \fi
+
+    % Footer date
+    \ifshowfooterdate
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        font=\fontsize{11bp}{11bp}\selectfont\sffamily,
+        text=white
+    ] at ([xshift=16.61bp,yshift=-522.38bp]current page.north west) {\additionalfooterdate};
+    \fi
+
+    % Horizontal logo at top-right
+    \node[anchor=north west, inner sep=0pt]
+        at ([xshift=558.24bp,yshift=-6.78bp]current page.north west) {
+        \includegraphics[width=150.25bp]{\innerlogo}
+    };
+\end{tikzpicture}
+}
+
+% --------------------------------------------------
+% Cover title page
+% --------------------------------------------------
+\defbeamertemplate*{title page}{pucv}{
+\begin{tikzpicture}[remember picture,overlay]
+
+    % Main title
+    \node[
+        anchor=north west,
+        align=left,
+        inner sep=0pt
+    ] at ([xshift=74.28bp,yshift=-306.14bp]current page.north west) {
+        {\robotomedium\fontsize{20bp}{24bp}\selectfont
+         \addfontfeature{LetterSpace=18}%
+         \color{white}%
+         TÍTULO PRINCIPAL}
+    };
+
+    % Subtitle
+    \node[
+        anchor=north west,
+        align=left,
+        inner sep=0pt
+    ] at ([xshift=74.28bp,yshift=-346.42bp]current page.north west) {
+        {\robotomedium\fontsize{16bp}{19bp}\selectfont
+         \addfontfeature{LetterSpace=10}%
+         \color{white}%
+         Título Secundario}
+    };
+
+    % pucv.cl text on cover slide
+    \node[
+        anchor=north east,
+        align=right,
+        inner sep=0pt,
+        text=white,
+        text opacity=0.5,
+        font=\fontsize{16bp}{19bp}\selectfont
+    ] at ([xshift=673.96bp,yshift=-306.14bp]current page.north west) {pucv.cl};
+
+    % Metadata (Dirección)
+    \node[
+        anchor=north east,
+        align=right,
+        text width=200bp,
+        inner sep=0pt,
+        text=white
+    ] at ([xshift=673.96bp,yshift=-433.74bp]current page.north west) {
+        {\fontsize{16bp}{19bp}\selectfont Dirección de Comunicación}
+    };
+
+    % Date
+    \node[
+        anchor=north east,
+        align=right,
+        text width=181bp,
+        inner sep=0pt,
+        text=white
+    ] at ([xshift=674.40bp,yshift=-472.72bp]current page.north west) {
+        {\fontsize{10bp}{12bp}\selectfont Valparaíso, 7 de octubre 2016}
+    };
+
+\end{tikzpicture}
+}
+\setbeamertemplate{title page}[pucv]
+
+% --------------------------------------------------
+% Interior slide macro
+% --------------------------------------------------
+\newcommand{\pucvframe}[2]{
+\begin{frame}[plain]
+\begin{tikzpicture}[remember picture,overlay]
+
+    % Title
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        font=\robotomedium\fontsize{16bp}{19bp}\selectfont,
+        text=PUCVTitleRed
+    ] at ([xshift=54.62bp,yshift=-84.44bp]current page.north west) {%
+        \addfontfeature{LetterSpace=12}#1};
+
+    % Body
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        text width=501.3bp
+    ] at ([xshift=76.49bp,yshift=-139.56bp]current page.north west) {
+        \begin{minipage}{501.3bp}
+        \fontsize{16bp}{19.2bp}\selectfont
+        \color{PUCVText}
+        \RaggedRight
+        \setlength{\parskip}{0pt}
+        \setlength{\leftmargini}{22.55bp}
+        \setlength{\labelwidth}{0bp}
+        \setlength{\labelsep}{22.55bp}
+        \setlength{\itemsep}{0.00bp}
+        \setlength{\topsep}{8bp}
+        #2
+        \end{minipage}
+    };
+
+\end{tikzpicture}
+\end{frame}
+}
+
+% --------------------------------------------------
+% Metadata
+% --------------------------------------------------
+\title{TÍTULO PRINCIPAL}
+\subtitle{Título Secundario}
+\author{Dirección de Comunicación}
+\institute{Pontificia Universidad Católica de Valparaíso}
+\date{Valparaíso, 7 de octubre 2016}
+
+% --------------------------------------------------
+% Document
+% --------------------------------------------------
+\begin{document}
+
+% Cover
+{
+\setbeamertemplate{background}{
+\begin{tikzpicture}[remember picture,overlay]
+    % ------------------------------------------
+    % COVER SLIDE (720x540 bp)
+    % ------------------------------------------
+    \fill[white] (current page.north west) rectangle (current page.south east);
+
+    % Lower blue block: bottom 270bp (y = -270bp to -540bp)
+    \fill[PUCVBlue]
+        ([yshift=-270bp]current page.north west)
+        rectangle (current page.south east);
+
+    % Gold triangle: Top right
+    \fill[PUCVGold]
+        (current page.north east)
+        -- ([xshift=-270bp,yshift=-270bp]current page.north east)
+        -- ([yshift=-270bp]current page.north east)
+        -- cycle;
+
+    % Cover logo: exact position and width
+    \node[anchor=north west, inner sep=0pt]
+        at ([xshift=230.28bp,yshift=-31.58bp]current page.north west) {
+        \includegraphics[width=269.42bp]{\coverlogo}
+    };
+\end{tikzpicture}
+}
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+}
+
+% Table of Contents Slide
+\pucvframe{TABLA DE CONTENIDOS}{
+\tableofcontents
+}
+
+% --------------------------------------------------
+% Section 1: Plantilla PUCV
+% --------------------------------------------------
+\section{Plantilla PUCV}
+
+% Content
+\pucvframe{TÍTULO INTERIOR}{
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lacinia
+nisi at nisi tincidunt, sed congue tellus aliquet. Pellentesque nec urna
+vel neque mattis luctus. Aliquam maximus, dolor quis laoreet lobortis,
+nibh ante condimentum sem, eget commodo nisl ex ac nibh. Aenean
+non dolor vel leo auctor commodo at eu urna.
+
+\vspace{19bp}
+
+\begin{itemize}
+    \item Lista 1
+    \item Lista 2
+    \item Lista 3
+\end{itemize}
+}
+
+% --------------------------------------------------
+% Section 2: Ejemplos
+% --------------------------------------------------
+\section{Ejemplos}
+
+% Showcase Slide: Blocks & Highlights
+\pucvframe{BLOQUES Y RESALTADOS}{
+En LaTeX Beamer se puede destacar texto usando el comando \alert{alert} para llamar la atención del público.
+
+\vspace{10bp}
+
+Para estructurar la información, se pueden usar bloques:
+
+\begin{columns}[onlytextwidth]
+    \begin{column}{0.48\linewidth}
+        \begin{block}{Bloque Estándar}
+        Se usa para notas o explicaciones adicionales.
+        \end{block}
+        
+        \begin{examples}{Ejemplo de Código}
+        Ejemplo en bloque con tonos PUCV Oro.
+        \end{examples}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\linewidth}
+        \begin{alertblock}{Bloque de Alerta}
+        Se utiliza para teoremas importantes, advertencias o reglas críticas.
+        \end{alertblock}
+    \end{column}
+\end{columns}
+}
+
+% Showcase Slide: Transitions & Overlays
+\pucvframe{TRANSICIONES Y EFECTOS}{
+Podemos controlar la visibilidad y el formato dinámico de los elementos:
+
+\vspace{10bp}
+
+\begin{itemize}
+    \item<1-> \textbf{Overlay Básico}: Este punto es visible desde el inicio.
+    \item<2-> \textbf{Uso de Uncover}: \uncover<2->{Este texto se revela en el paso 2 reservando su espacio.}
+    \item<3-> \textbf{Formato Dinámico}: \alert<3>{¡Este texto se resalta en rojo} y \structure<3>{este en azul estructura} solo en el paso 3!
+\end{itemize}
+
+\vspace{15bp}
+
+\only<2->{
+    \fontsize{13bp}{15bp}\selectfont
+    \color{PUCVRed}
+    ¡Esta nota descriptiva se renderiza (sin ocupar espacio previo) en el paso 2!
+}
+}
+
+% Showcase Slide: Código Python (Fragile Frame)
+\begin{frame}[fragile,plain]
+\begin{tikzpicture}[remember picture,overlay]
+    % Draw content slide background
+    \fill[white] (current page.north west) rectangle (current page.south east);
+    \fill[PUCVRed] (current page.north west) rectangle ([yshift=-16.5bp]current page.north east);
+    \fill[PUCVBottom] (current page.south west) rectangle ([yshift=23bp]current page.south east);
+    \node[anchor=north west, inner sep=0pt, font=\fontsize{11bp}{11bp}\selectfont\sffamily, text=white] at ([xshift=607.53bp,yshift=-522.38bp]current page.north west) {pucv.cl};
+    \ifshowpagenumbers
+    \node[anchor=north west, inner sep=0pt, font=\fontsize{11bp}{11bp}\selectfont\sffamily, text=white] at ([xshift=660.00bp,yshift=-522.38bp]current page.north west) {\insertframenumber};
+    \fi
+    \ifshowfootertext
+    \node[anchor=north, inner sep=0pt, font=\fontsize{11bp}{11bp}\selectfont\sffamily, text=white] at ([xshift=360.00bp,yshift=-522.38bp]current page.north west) {\additionalfootertext};
+    \fi
+    \ifshowfooterdate
+    \node[anchor=north west, inner sep=0pt, font=\fontsize{11bp}{11bp}\selectfont\sffamily, text=white] at ([xshift=16.61bp,yshift=-522.38bp]current page.north west) {\additionalfooterdate};
+    \fi
+    \node[anchor=north west, inner sep=0pt] at ([xshift=558.24bp,yshift=-6.78bp]current page.north west) {\includegraphics[width=150.25bp]{\innerlogo}};
+
+    % Title
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        font=\robotomedium\fontsize{16bp}{19bp}\selectfont,
+        text=PUCVTitleRed
+    ] at ([xshift=54.62bp,yshift=-84.44bp]current page.north west) {%
+        \addfontfeature{LetterSpace=12}CÓDIGO PYTHON (LISTINGS)};
+
+    % Body
+    \node[
+        anchor=north west,
+        inner sep=0pt,
+        text width=501.3bp
+    ] at ([xshift=76.49bp,yshift=-139.56bp]current page.north west) {
+        \begin{minipage}{501.3bp}
+        \fontsize{12bp}{14bp}\selectfont
+        \color{PUCVText}
+        Se puede incrustar y resaltar sintaxis de código fuente (como Python) mediante el paquete \texttt{listings} dentro de un frame \texttt{[fragile]}:
+        
+        \vspace{8bp}
+        
+\begin{lstlisting}[style=pythonstyle]
+# Algoritmo simple para entrenar un modelo
+def train_step(model, inputs, targets, lr):
+    predictions = model(inputs)
+    loss = MSE(predictions, targets)
+    loss.backward()
+    model.weights -= lr * model.weights.grad
+    return loss
+\end{lstlisting}
+        \end{minipage}
+    };
+\end{tikzpicture}
+\end{frame}
+
+% Showcase Slide: Pseudocódigo de Algoritmo
+\pucvframe{PSEUDOCÓDIGO DE ALGORITMOS}{
+Tipografía y formateo de algoritmos mediante el uso de los paquetes \texttt{algorithm} y \texttt{algpseudocode}:
+
+\vspace{10bp}
+
+\begin{algorithm}[H]
+    \centering
+    \fontsize{14bp}{17bp}\selectfont
+    \color{PUCVText}
+    \begin{algorithmic}[1]
+        \Procedure{GradientDescent}{$\theta, \alpha, N$}
+            \For{$t \leftarrow 1$ to $N$}
+                \State $g_t \leftarrow \nabla_\theta L(\theta)$
+                \State $\theta \leftarrow \theta - \alpha g_t$
+            \EndFor
+            \State \textbf{return} $\theta$
+        \EndProcedure
+    \end{algorithmic}
+    \caption{Algoritmo de Descenso de Gradiente.}
+    \label{alg:gd}
+\end{algorithm}
+}
+
+% Showcase Slide: Botones de Navegación
+\pucvframe{BOTONES DE NAVEGACIÓN}{
+\label{sec:nav_buttons}
+LaTeX Beamer permite agregar hipervínculos internos e interactivos entre diapositivas, útil para la navegación no lineal:
+
+\vspace{15bp}
+
+\begin{itemize}
+    \item Puedes saltar directamente al apéndice técnico al final de la presentación para revisar los complementos.
+    \item Al hacer clic en el botón inferior, el lector se desplazará automáticamente a la página de destino.
+\end{itemize}
+
+\vspace{15bp}
+
+\hyperlink{sec:appendix_technical}{\beamerbutton{Ir al Apéndice Técnico}}
+\quad
+\hyperlink{sec:summary_ref}{\beamergotobutton{Ir al Resumen de la Presentación}}
+}
+
+% Showcase Slide: Tablas Académicas
+\pucvframe{TABLAS ACADÉMICAS}{
+Para la presentación de datos, se recomienda el uso del paquete \texttt{booktabs} para lograr líneas de división limpias y profesionales:
+
+\vspace{15bp}
+
+\begin{table}[h]
+    \centering
+    \fontsize{14bp}{17bp}\selectfont
+    \color{PUCVText}
+    \begin{tabular}{lccc}
+        \toprule
+        \textbf{Configuración} & \textbf{Estilo} & \textbf{Interactividad} & \textbf{Compatibilidad} \\
+        \midrule
+        Beamer Estándar & Por defecto & Media & Alta \\
+        Personalización TikZ & Premium & Alta & Media \\
+        Overlays Activos & Flipbook & Animada & Universal \\
+        \bottomrule
+    \end{tabular}
+    \caption{Comparativa de metodologías de diseño en LaTeX Beamer.}
+    \label{tab:comparativa}
+\end{table}
+}
+
+% Showcase Slide: Formulación Matemática
+\pucvframe{FORMULACIÓN MATEMÁTICA}{
+El motor de tipografía matemática de LaTeX es ideal para presentaciones científicas:
+
+\vspace{10bp}
+
+Ejemplo de ecuación en línea: $f(x) = \sigma(w^T x + b)$.
+
+\vspace{10bp}
+
+Ecuación numerada y referenciada:
+\begin{equation}
+    \mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
+    \label{eq:linear_model}
+\end{equation}
+
+\vspace{10bp}
+
+Definición de matriz de covarianza en bloques:
+\[
+    \boldsymbol{\Sigma} = \begin{bmatrix}
+        \sigma_1^2 & \sigma_{12} \\
+        \sigma_{21} & \sigma_2^2
+    \end{bmatrix}
+\]
+}
+
+% Showcase Slide: Diseños de Columnas
+\pucvframe{DISEÑOS DE COLUMNAS}{
+Podemos distribuir el contenido en múltiples columnas de manera flexible:
+
+\vspace{10bp}
+
+\textbf{Diseño de 2 Columnas:}
+\begin{columns}[onlytextwidth]
+    \begin{column}{0.48\linewidth}
+        \begin{block}{Columna A}
+        Texto descriptivo de la columna izquierda.
+        \end{block}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\linewidth}
+        \begin{block}{Columna B}
+        Texto descriptivo de la columna derecha.
+        \end{block}
+    \end{column}
+\end{columns}
+
+\vspace{15bp}
+
+\textbf{Diseño de 3 Columnas:}
+\begin{columns}[onlytextwidth]
+    \begin{column}{0.30\linewidth}
+        \centering
+        \textbf{Fase 1} \\
+        Planificación
+    \end{column}
+    \hfill
+    \begin{column}{0.30\linewidth}
+        \centering
+        \textbf{Fase 2} \\
+        Desarrollo
+    \end{column}
+    \hfill
+    \begin{column}{0.30\linewidth}
+        \centering
+        \textbf{Fase 3} \\
+        Despliegue
+    \end{column}
+\end{columns}
+}
+
+% --------------------------------------------------
+% Section 3: Integración Multimedia
+% --------------------------------------------------
+\section{Integración Multimedia}
+
+% Showcase Slide 1: Image Integration
+% --------------------------------------------------
+\pucvframe{INTEGRACIÓN DE IMÁGENES}{
+Se pueden incluir imágenes estándar en los formatos más comunes (PNG, JPG, PDF) con facilidad, siguiendo las normas oficiales de la institución~\cite{pucv2016graphics}:
+
+\vspace{10bp}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=110bp]{\coverlogo}
+    \caption{\fontsize{10bp}{12bp}\selectfont Escudo Oficial PUCV (versión vertical para portadas).}
+\end{figure}
+}
+
+% --------------------------------------------------
+% Showcase Slide 2: Animated GIF (animate package)
+% --------------------------------------------------
+\pucvframe{GIFS ANIMADOS (PAQUETE ANIMATE)}{
+Para reproducir animaciones de forma integrada sin duplicar páginas de diapositivas, se utiliza el paquete \texttt{animate} cargando una secuencia de imágenes:
+
+\vspace{15bp}
+
+\begin{columns}[onlytextwidth]
+    \begin{column}{0.45\linewidth}
+        \begin{figure}
+        \centering
+        \animategraphics[loop,autoplay,height=100bp]{10}{frames/frame_}{0}{9}
+        \caption{\fontsize{10bp}{12bp}\selectfont Círculo pulsante animado.}
+        \end{figure}
+    \end{column}
+    \hfill
+    \begin{column}{0.5\linewidth}
+        \fontsize{12bp}{14bp}\selectfont
+        \textbf{Detalles del método:}
+        
+        \vspace{5bp}
+        
+        \texttt{\textbackslash animategraphics[loop, autoplay]\{10\}\{frames/frame\char`\_\}\{0\}\{9\}}
+        
+        \vspace{10bp}
+        
+        \textbf{Compatibilidad de visores:}
+        \begin{itemize}
+            \item \textbf{Adobe Acrobat Reader:} Reproduce la animación de forma interactiva y automática.
+            \item \textbf{Otros visores (macOS Vista Previa, Chrome, Safari, iOS/Android):} Muestran el primer fotograma de forma estática en una sola página, evitando duplicar páginas.
+        \end{itemize}
+    \end{column}
+\end{columns}
+}
+
+% --------------------------------------------------
+% Showcase Slide 3: Embedded YouTube Video Playback
+% --------------------------------------------------
+\pucvframe{REPRODUCCIÓN DE VIDEO (YOUTUBE)}{
+Para compatibilidad universal, tanto la pantalla del reproductor como el botón y el enlace inferior son interactivos:
+
+\vspace{10bp}
+
+\begin{columns}[onlytextwidth]
+    \begin{column}{0.45\linewidth}
+        \begin{figure}
+        \centering
+        \href{https://youtu.be/0y2951rC2p0}{%
+        \begin{tikzpicture}%
+            \fill[black!85] (0,0) rectangle (200bp, 112.5bp);%
+            \fill[red, rounded corners=4bp] (100bp-18bp, 56.25bp-12bp) rectangle (100bp+18bp, 56.25bp+12bp);%
+            \fill[white] (100bp-5bp, 56.25bp+7bp) -- (100bp+8bp, 56.25bp) -- (100bp-5bp, 56.25bp-7bp) -- cycle;%
+            \fill[black!95] (0, 0) rectangle (200bp, 10bp);%
+            \fill[red] (0, 0) rectangle (60bp, 2bp);%
+            \fill[black!60] (60bp, 0) rectangle (200bp, 2bp);%
+            \fill[red] (60bp, 1bp) circle (2bp);%
+            \fill[black, opacity=0.4] (0, 112.5bp-18bp) rectangle (200bp, 112.5bp);%
+            \node[anchor=west, text=white] at (5bp, 112.5bp-9bp) {\fontsize{6bp}{6bp}\selectfont Video Institucional PUCV};%
+            \node[anchor=west, text=white] at (5bp, 5bp) {\fontsize{5bp}{5bp}\selectfont 0:34 / 2:15};%
+            \draw[white, line width=0.4bp] (192bp, 6bp) -- (195bp, 6bp) -- (195bp, 4bp);%
+            \draw[white, line width=0.4bp] (192bp, 3bp) -- (195bp, 3bp) -- (195bp, 5bp);%
+            \draw[white, line width=0.4bp] (187bp, 6bp) -- (184bp, 6bp) -- (184bp, 4bp);%
+            \draw[white, line width=0.4bp] (187bp, 3bp) -- (184bp, 3bp) -- (184bp, 5bp);%
+        \end{tikzpicture}%
+        }
+        
+        \vspace{6bp}
+        
+        \href{https://youtu.be/0y2951rC2p0}{\beamergotobutton{Ver Video en YouTube}}
+        \end{figure}
+    \end{column}
+    \hfill
+    \begin{column}{0.5\linewidth}
+        \fontsize{13bp}{16bp}\selectfont
+        \textbf{Compatibilidad con Vista Previa:}
+        \begin{itemize}
+            \item Visores interactivos (Adobe Acrobat) permiten hacer clic en la pantalla de video o en el botón Beamer.
+            \item Vista Previa de macOS no siempre registra enlaces sobre dibujos TikZ o botones. 
+            \item Para asegurar que funcione en cualquier visor, puedes hacer clic abajo en el enlace de texto directo:
+            
+            \vspace{5bp}
+            \fontsize{11bp}{13bp}\selectfont
+            \href{https://youtu.be/0y2951rC2p0}{\texttt{https://youtu.be/0y2951rC2p0}}
+        \end{itemize}
+    \end{column}
+\end{columns}
+}
+
+% --------------------------------------------------
+% Section 4: Referencias
+% --------------------------------------------------
+\section{Referencias}
+
+% Bibliography Slide
+\pucvframe{REFERENCIAS BIBLIOGRÁFICAS}{
+Bibliografía de la presentación recopilada automáticamente mediante BibTeX:
+
+\vspace{15bp}
+
+\bibliographystyle{plain}
+\bibliography{ref}
+}
+
+% --------------------------------------------------
+% Section 5: Resumen
+% --------------------------------------------------
+\section{Resumen}
+
+% Summary Slide
+\pucvframe{RESUMEN DE LA PLANTILLA}{
+\label{sec:summary_ref}
+Puntos clave de la plantilla de presentación Beamer PUCV:
+
+\vspace{15bp}
+
+\begin{itemize}
+    \item \textbf{Fidelidad Visual:} Reconstrucción exacta del diseño institucional PUCV 2016 en vectores nativos.
+    \item \textbf{Compatibilidad Asegurada:} Optimizado para reproducir contenido multimedia en visores restrictivos como macOS Vista Previa.
+    \item \textbf{Soporte Académico Completo:} Diseños de múltiples columnas, tablas profesionales, fórmulas matemáticas avanzadas y bibliografía automatizada con BibTeX.
+    \item \textbf{Estructura Limpia:} Organización modular mediante secciones y control de numeración en el apéndice.
+\end{itemize}
+}
+
+% --------------------------------------------------
+% Apéndice (Supplementary slides)
+% --------------------------------------------------
+\appendix
+
+% Appendix Slide 1
+\pucvframe{APÉNDICE: COMPLEMENTO TÉCNICO}{
+\label{sec:appendix_technical}
+Esta sección contiene material de soporte o derivaciones matemáticas detalladas que no forman parte del cuerpo principal de la presentación.
+
+\vspace{15bp}
+
+\begin{itemize}
+    \item Los números de página en el apéndice se manejan de forma independiente.
+    \item El paquete \texttt{appendixnumberbeamer} previene que estas diapositivas afecten el conteo de páginas de la presentación principal.
+\end{itemize}
+
+\vspace{10bp}
+
+\hyperlink{sec:nav_buttons}{\beamerreturnbutton{Regresar al Cuerpo Principal}}
+}
+
+\end{document}

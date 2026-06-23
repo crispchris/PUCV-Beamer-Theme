@@ -1,0 +1,19 @@
+# LaTeX auxiliary files
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.bbl
+*.blg
+
+# Compiled presentation output and test files
+slide.pdf
+testfont*.pdf
+testsize.pdf
+missfont.log
+
+# VS Code settings
+.vscode/
