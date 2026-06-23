@@ -2,6 +2,8 @@
 
 An unofficial LaTeX Beamer template designed to match the official **Pontificia Universidad Católica de Valparaíso (PUCV)** graphic standards of 2016.
 
+![Theme Preview](titleslide.png)
+
 ---
 
 ## ⚠️ Disclaimer
